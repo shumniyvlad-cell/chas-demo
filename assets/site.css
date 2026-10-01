@@ -1,0 +1,989 @@
+/* Час: запись на платную встречу. Плакат на бетоне + оранжевый билет. */
+
+:root {
+  --paper: #ecedea;
+  --paper-deep: #dfe0dc;
+  --ink: #000;
+  --ticket: #ff5a1f;
+  --ticket-deep: #e8480f;
+  --muted: #5f615d;
+  --white: #fff;
+  --danger: #b0001e;
+
+  --display: 'Dela Gothic One', 'Arial Black', sans-serif;
+  --text: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --print: 'Handjet', ui-monospace, 'SFMono-Regular', monospace;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1280px;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* атрибут hidden сильнее любых display у классов */
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* повёрнутый билет не должен давать горизонтальный скролл на телефоне */
+  overflow-x: clip;
+}
+
+html[data-motion='off'] {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.5 var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--ticket);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ticket);
+  outline-offset: 2px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- тестовый режим: лента-ограждение ---------- */
+
+.testbar {
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 14px, var(--ticket) 14px 28px);
+  padding: 6px var(--gutter);
+  text-align: center;
+}
+
+.testbar span {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--white);
+  font: 600 13px/1.4 var(--text);
+  padding: 4px 10px;
+}
+
+/* ---------- шапка ---------- */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.who strong {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.who span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.tg {
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* ---------- первый экран ---------- */
+
+.hero {
+  padding-top: clamp(24px, 6vw, 72px);
+  padding-bottom: clamp(40px, 7vw, 96px);
+}
+
+.hero h1 {
+  margin: 0;
+  font: 400 clamp(46px, 10.4vw, 150px) / 0.92 var(--display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  hyphens: manual;
+}
+
+.hero-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px 48px;
+  align-items: end;
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+.about {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(18px, 1.6vw, 21px);
+  line-height: 1.45;
+}
+
+.rates {
+  margin: 12px 0 0;
+  max-width: 46ch;
+  color: var(--muted);
+}
+
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.next-slot {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  min-height: 1.5em;
+}
+
+/* ---------- кнопки ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 28px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--white);
+  font: 700 18px/1 var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 var(--ticket);
+}
+
+.btn:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.btn[disabled] {
+  cursor: progress;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+html[data-motion='off'] .btn {
+  transition: none;
+}
+
+/* ---------- запись ---------- */
+
+.book {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  padding-bottom: clamp(56px, 8vw, 120px);
+  scroll-margin-top: 16px;
+}
+
+.steps {
+  min-width: 0;
+}
+
+.step {
+  border: 0;
+  border-top: 3px solid var(--ink);
+  margin: 0 0 clamp(36px, 4vw, 56px);
+  padding: 18px 0 0;
+  min-width: 0;
+}
+
+/* float снимает с legend особую раскладку fieldset */
+.step legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 18px;
+}
+
+.step legend + * {
+  clear: both;
+}
+
+.step-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font: 600 22px/1.2 var(--text);
+}
+
+.step-head .n {
+  font: 400 28px/1 var(--display);
+}
+
+.step-note {
+  margin: -8px 0 16px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* общий вид выбора: настоящий radio + подпись-кнопка */
+.choice {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.choice .face {
+  display: block;
+  height: 100%;
+  border: 2px solid var(--ink);
+  background: var(--white);
+  transition: background-color 0.12s ease;
+}
+
+.choice:hover .face {
+  background: var(--paper-deep);
+}
+
+.choice input:checked + .face {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.choice input:focus-visible + .face {
+  outline: 3px solid var(--ticket);
+  outline-offset: 2px;
+}
+
+.choice input:disabled + .face {
+  background: transparent;
+  border-color: var(--paper-deep);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+html[data-motion='off'] .choice .face {
+  transition: none;
+}
+
+.formats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.formats .face {
+  padding: 18px 20px 20px;
+}
+
+.format-title {
+  display: block;
+  font: 400 28px/1.1 var(--display);
+}
+
+.format-price {
+  display: block;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.format-place {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+.durations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.durations .face {
+  padding: 14px 20px;
+  font-size: 17px;
+}
+
+.durations .face b {
+  font-weight: 700;
+}
+
+.days {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 74px;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 14px;
+  margin: 0 -2px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.days .choice {
+  scroll-snap-align: start;
+}
+
+.days .face {
+  padding: 10px 6px 12px;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.day-wd {
+  display: block;
+  font-size: 14px;
+}
+
+.day-num {
+  display: block;
+  margin: 4px 0 2px;
+  font: 400 28px/1 var(--display);
+}
+
+.day-mon {
+  display: block;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.times {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.times .face {
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.empty {
+  margin: 18px 0 0;
+  padding: 18px 20px;
+  border: 2px dashed var(--ink);
+  max-width: 52ch;
+}
+
+.tz-hint {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* поля */
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field.wide {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.field .hint {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--ink);
+  font: 400 17px/1.4 var(--text);
+  padding: 13px 14px;
+  appearance: none;
+}
+
+.field textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #8a8c87;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline-offset: 0;
+}
+
+.field [aria-invalid='true'] {
+  border-color: var(--danger);
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+
+.consent {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 20px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.consent input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+}
+
+.consent.invalid {
+  color: var(--danger);
+}
+
+.step.invalid .step-head {
+  color: var(--danger);
+}
+
+/* ---------- билет ---------- */
+
+.side {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ticket {
+  --notch: 13px;
+  position: relative;
+  background: var(--ticket);
+  color: var(--ink);
+  /* вырезы по краям линии отрыва */
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 var(--tear), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--tear), #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 var(--tear), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--tear), #0000 98%, #000) right / 51% 100% no-repeat;
+  --tear: calc(100% - 92px);
+  transform: rotate(-1.2deg);
+  transform-origin: 50% 0;
+}
+
+.ticket-main {
+  padding: 22px 24px 18px;
+}
+
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Handjet: оси ELGR/ELSH дают точечную «печать» кассового аппарата.
+   font-variation-settings — после font: сокращённое свойство его сбрасывает */
+.ticket-top .num {
+  font: 800 19px/1 var(--print);
+  font-variation-settings: 'ELGR' 2, 'ELSH' 4;
+  letter-spacing: 0.04em;
+}
+
+.ticket-owner {
+  margin: 14px 0 18px;
+  font: 400 30px/1 var(--display);
+  letter-spacing: -0.02em;
+}
+
+.ticket dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px 16px;
+  align-items: baseline;
+}
+
+.ticket dt {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ticket dd {
+  margin: 0;
+  font: 800 25px/1.1 var(--print);
+  font-variation-settings: 'ELGR' 2, 'ELSH' 4;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.ticket dd.blank {
+  opacity: 0.45;
+}
+
+.ticket-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 2px solid var(--ink);
+}
+
+.ticket-total > span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ticket-total strong {
+  font: 400 40px/1 var(--display);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.cur {
+  font-family: var(--text);
+  font-weight: 800;
+  font-size: 1.15em;
+  line-height: 0;
+  letter-spacing: 0;
+}
+
+.ticket-stub {
+  height: 92px;
+  border-top: 2px dashed rgb(0 0 0 / 0.55);
+  margin: 0 var(--notch);
+  padding: 14px 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.ticket-stub p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  max-width: 24ch;
+}
+
+.barcode {
+  flex: none;
+  display: block;
+  width: 116px;
+  height: 52px;
+}
+
+/* «печать» значения на билете */
+html[data-motion='on'] .ticket dd.printed,
+html[data-motion='on'] .ticket-total strong.printed {
+  animation: print 0.32s steps(10, end) both;
+}
+
+@keyframes print {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.pay-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 15px;
+}
+
+.pay-type label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pay-type input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.pay {
+  width: 100%;
+}
+
+.pay-note {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.error {
+  margin: 0;
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.error:empty {
+  display: none;
+}
+
+/* ---------- как это устроено ---------- */
+
+.how {
+  border-top: 3px solid var(--ink);
+  padding-top: 24px;
+  padding-bottom: clamp(56px, 8vw, 112px);
+}
+
+.how h2,
+.rules h2 {
+  margin: 0 0 28px;
+  font: 400 clamp(30px, 3.6vw, 44px) / 1.05 var(--display);
+  letter-spacing: -0.02em;
+}
+
+.how ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  counter-reset: how;
+}
+
+.how li {
+  counter-increment: how;
+}
+
+.how li::before {
+  content: counter(how);
+  display: block;
+  font: 400 56px/1 var(--display);
+  margin-bottom: 12px;
+  -webkit-text-stroke: 2px var(--ink);
+  color: transparent;
+}
+
+.how h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.how p {
+  margin: 0;
+  max-width: 34ch;
+  color: #2c2d2b;
+}
+
+.rules {
+  border-top: 3px solid var(--ink);
+  padding-top: 24px;
+  padding-bottom: clamp(56px, 8vw, 112px);
+}
+
+.rules p {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 19px;
+}
+
+/* ---------- подвал ---------- */
+
+.foot {
+  border-top: 3px solid var(--ink);
+  padding-top: 20px;
+  padding-bottom: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.foot a {
+  color: var(--ink);
+}
+
+/* ---------- страница билета ---------- */
+
+.ticket-page {
+  padding-top: clamp(16px, 4vw, 48px);
+  padding-bottom: clamp(48px, 8vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+
+.ticket-page .ticket {
+  transform: rotate(-2deg);
+}
+
+.status-title {
+  margin: 0 0 16px;
+  font: 400 clamp(36px, 5vw, 64px) / 1 var(--display);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.status-text {
+  margin: 0 0 24px;
+  max-width: 48ch;
+  font-size: 19px;
+}
+
+.status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.countdown {
+  font-weight: 700;
+}
+
+/* штамп ставится на корешок: данные билета остаются читаемыми */
+.stamp {
+  position: absolute;
+  left: 30px;
+  bottom: 24px;
+  padding: 7px 12px 5px;
+  border: 4px solid var(--ink);
+  font: 400 26px/1 var(--display);
+  letter-spacing: 0.02em;
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+html[data-motion='on'] .stamp {
+  animation: stamp 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.25) 0.25s both;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: rotate(-7deg) scale(2.2);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-7deg) scale(1);
+  }
+}
+
+.ticket.void {
+  background: var(--paper-deep);
+}
+
+.facts {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 62ch;
+  border-top: 2px solid var(--ink);
+}
+
+.facts li {
+  padding: 14px 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+.facts b {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.spinner {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  border: 3px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -0.1em;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- простые страницы ---------- */
+
+.doc {
+  padding-top: clamp(16px, 4vw, 48px);
+  padding-bottom: 80px;
+  max-width: 760px;
+}
+
+.doc h1 {
+  font: 400 clamp(36px, 5vw, 56px) / 1.02 var(--display);
+  letter-spacing: -0.03em;
+  margin: 0 0 28px;
+}
+
+.doc h2 {
+  font-size: 21px;
+  margin: 32px 0 8px;
+}
+
+.doc p,
+.doc li {
+  max-width: 66ch;
+}
+
+/* ---------- адаптив ---------- */
+
+@media (max-width: 960px) {
+  .book {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .side {
+    position: static;
+    max-width: 480px;
+  }
+
+  .ticket-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ticket-page .ticket {
+    max-width: 440px;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .how ol {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stamp {
+    left: 20px;
+    font-size: 20px;
+  }
+
+  .barcode {
+    width: 84px;
+  }
+}
+
+@media (max-width: 420px) {
+  .tg {
+    font-size: 14px;
+  }
+
+  .ticket-main {
+    padding: 18px 18px 16px;
+  }
+
+  .ticket-total strong {
+    font-size: 34px;
+  }
+
+  .formats .face {
+    padding: 16px;
+  }
+}

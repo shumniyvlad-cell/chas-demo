@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru" data-demo="1" data-motion="off">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Влад Марченков — запись на встречу</title>
+  <meta name="description" content="Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. Приходишь с задачей — уходишь с планом, а не с «надо подумать».">
+  <meta property="og:title" content="Час, который экономит месяц">
+  <meta property="og:description" content="Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. Приходишь с задачей — уходишь с планом, а не с «надо подумать».">
+  <meta name="theme-color" content="#ecedea">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/golos-text-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dela-gothic-one-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script type="application/json" id="config">{"ownerName":"Влад Марченков","brand":"Vlad March Media","headline":"Час, который экономит месяц","about":"Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. Приходишь с задачей — уходишь с планом, а не с «надо подумать».","telegram":"marchvlv","timezone":"Europe/Moscow","formats":{"online":{"title":"Онлайн","pricePerHour":5000,"place":"Созвон по видео — ссылка придёт после оплаты"},"offline":{"title":"Офлайн","pricePerHour":8000,"place":"Сочи. Точное место согласуем в Telegram"}},"durations":[60,120],"horizonDays":21,"holdMinutes":20,"minNoticeHours":12,"policy":"Перенести встречу можно один раз, если написать за 24 часа. Если не приду я — верну деньги полностью или перенесём, как тебе удобнее.","testMode":true,"paymentTypes":["AC"],"demo":true}</script>
+  <script type="module" src="assets/book.js"></script>
+</head>
+<body>
+  <div class="testbar" data-testbar hidden><span>Демо: оплата ненастоящая, записи видны только в этом браузере</span></div>
+
+  <header class="top wrap">
+    <a class="who" href="">
+      <strong>Влад Марченков</strong>
+      <span>Vlad March Media</span>
+    </a>
+    <a class="tg" data-tg href="https://t.me/marchvlv" target="_blank" rel="noopener">Написать в Telegram</a>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <h1>Час, который экономит месяц</h1>
+      <div class="hero-foot">
+        <div>
+          <p class="about">Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. Приходишь с задачей — уходишь с планом, а не с «надо подумать».</p>
+          <p class="rates" data-rates></p>
+        </div>
+        <div class="hero-cta">
+          <a class="btn" href="#book">Выбрать время</a>
+          <p class="next-slot" data-next-slot></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="book wrap" id="book" aria-label="Запись на встречу">
+      <form class="steps" data-form novalidate>
+        <fieldset class="step" data-step="format">
+          <legend><span class="step-head"><span class="n">1</span>Формат</span></legend>
+          <div class="formats" data-formats></div>
+        </fieldset>
+
+        <fieldset class="step" data-step="duration">
+          <legend><span class="step-head"><span class="n">2</span>Сколько времени</span></legend>
+          <div class="durations" data-durations></div>
+        </fieldset>
+
+        <fieldset class="step" data-step="when">
+          <legend><span class="step-head"><span class="n">3</span>День и время</span></legend>
+          <div class="days" data-days aria-label="День"></div>
+          <div class="times" data-times aria-label="Время"></div>
+          <p class="empty" data-empty hidden></p>
+          <p class="tz-hint" data-tz-hint></p>
+        </fieldset>
+
+        <fieldset class="step" data-step="who">
+          <legend><span class="step-head"><span class="n">4</span>Как с тобой связаться</span></legend>
+          <div class="fields">
+            <div class="field">
+              <label for="f-name">Имя</label>
+              <input id="f-name" name="name" autocomplete="name" maxlength="80" required>
+            </div>
+            <div class="field">
+              <label for="f-contact">Telegram или телефон</label>
+              <input id="f-contact" name="contact" autocomplete="tel" maxlength="80" placeholder="@username" required>
+            </div>
+            <div class="field wide">
+              <label for="f-topic">О чём поговорим</label>
+              <textarea id="f-topic" name="topic" maxlength="1000" placeholder="Например: хочу запустить подкаст и не понимаю, с чего начать"></textarea>
+              <span class="hint">Чем конкретнее задача, тем больше успеем за встречу.</span>
+            </div>
+          </div>
+          <label class="consent" data-consent>
+            <input type="checkbox" name="consent">
+            <span>Согласен на обработку имени и контакта для записи. <a href="privacy.html" target="_blank">Как я храню данные</a></span>
+          </label>
+        </fieldset>
+      </form>
+
+      <aside class="side" aria-label="Итог">
+        <div class="ticket" data-ticket>
+          <div class="ticket-main">
+            <div class="ticket-top">
+              <span>Билет на встречу</span>
+              <span class="num" data-t-num>№ ——————</span>
+            </div>
+            <p class="ticket-owner">Влад Марченков</p>
+            <dl>
+              <dt>формат</dt><dd data-t="format" class="blank">—</dd>
+              <dt>день</dt><dd data-t="date" class="blank">—</dd>
+              <dt>время</dt><dd data-t="time" class="blank">—</dd>
+              <dt>гость</dt><dd data-t="guest" class="blank">—</dd>
+            </dl>
+            <div class="ticket-total">
+              <span>к оплате</span>
+              <strong data-t="total">—</strong>
+            </div>
+          </div>
+          <div class="ticket-stub">
+            <p data-hold-note>Слот держится за тобой, пока идёт оплата.</p>
+            <svg class="barcode" data-barcode viewBox="0 0 116 52" aria-hidden="true"></svg>
+          </div>
+        </div>
+
+        <div class="pay-type" data-pay-type hidden>
+          <label><input type="radio" name="paymentType" value="AC" checked> Картой</label>
+          <label><input type="radio" name="paymentType" value="PC"> Кошельком ЮMoney</label>
+        </div>
+        <button class="btn pay" type="button" data-pay>Оплатить</button>
+        <p class="error" data-error role="alert"></p>
+        <p class="pay-note" data-pay-note>Оплата через ЮMoney. Деньги приходят напрямую мне.</p>
+      </aside>
+    </section>
+
+    <section class="how wrap">
+      <h2>Как это устроено</h2>
+      <ol>
+        <li>
+          <h3>Выбираешь формат и время</h3>
+          <p>Онлайн по видео или вживую в Сочи. В календаре только свободные окна.</p>
+        </li>
+        <li>
+          <h3>Оплачиваешь — слот твой</h3>
+          <p data-how-hold>Пока идёт оплата, время держится за тобой. Без оплаты бронь сгорает сама.</p>
+        </li>
+        <li>
+          <h3>Встречаемся</h3>
+          <p>В билете время, место или ссылка на созвон. Билет добавляется в календарь в один клик.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="rules wrap">
+      <h2>Переносы и возвраты</h2>
+      <p>Перенести встречу можно один раз, если написать за 24 часа. Если не приду я — верну деньги полностью или перенесём, как тебе удобнее.</p>
+    </section>
+  </main>
+
+  <footer class="foot wrap">
+    <span>Влад Марченков</span>
+    <a href="privacy.html">Обработка данных</a>
+    <a data-tg href="https://t.me/marchvlv" target="_blank" rel="noopener">Telegram</a>
+  </footer>
+</body>
+</html>

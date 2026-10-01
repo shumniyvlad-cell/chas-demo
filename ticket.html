@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru" data-demo="1" data-motion="off">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>Билет на встречу — Влад Марченков</title>
+  <meta name="theme-color" content="#ecedea">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/golos-text-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dela-gothic-one-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script type="application/json" id="config">{"ownerName":"Влад Марченков","brand":"Vlad March Media","headline":"Час, который экономит месяц","about":"Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. Приходишь с задачей — уходишь с планом, а не с «надо подумать».","telegram":"marchvlv","timezone":"Europe/Moscow","formats":{"online":{"title":"Онлайн","pricePerHour":5000,"place":"Созвон по видео — ссылка придёт после оплаты"},"offline":{"title":"Офлайн","pricePerHour":8000,"place":"Сочи. Точное место согласуем в Telegram"}},"durations":[60,120],"horizonDays":21,"holdMinutes":20,"minNoticeHours":12,"policy":"Перенести встречу можно один раз, если написать за 24 часа. Если не приду я — верну деньги полностью или перенесём, как тебе удобнее.","testMode":true,"paymentTypes":["AC"],"demo":true}</script>
+  <script type="module" src="assets/ticket.js"></script>
+</head>
+<body>
+  <div class="testbar" data-testbar hidden><span>Демо: оплата ненастоящая, записи видны только в этом браузере</span></div>
+
+  <header class="top wrap">
+    <a class="who" href="">
+      <strong>Влад Марченков</strong>
+      <span>Vlad March Media</span>
+    </a>
+    <a class="tg" data-tg href="https://t.me/marchvlv" target="_blank" rel="noopener">Написать в Telegram</a>
+  </header>
+
+  <main class="ticket-page wrap">
+    <div class="ticket" data-ticket hidden>
+      <div class="ticket-main">
+        <div class="ticket-top">
+          <span>Билет на встречу</span>
+          <span class="num" data-t-num></span>
+        </div>
+        <p class="ticket-owner">Влад Марченков</p>
+        <dl>
+          <dt>формат</dt><dd data-t="format"></dd>
+          <dt>день</dt><dd data-t="date"></dd>
+          <dt>время</dt><dd data-t="time"></dd>
+          <dt>гость</dt><dd data-t="guest"></dd>
+        </dl>
+        <div class="ticket-total">
+          <span data-t-total-label>оплачено</span>
+          <strong data-t="total"></strong>
+        </div>
+      </div>
+      <div class="ticket-stub">
+        <p data-t-stub></p>
+        <svg class="barcode" data-barcode viewBox="0 0 116 52" aria-hidden="true"></svg>
+      </div>
+      <div class="stamp" data-stamp hidden></div>
+    </div>
+
+    <section data-status aria-live="polite">
+      <h1 class="status-title" data-title>Загружаю билет…</h1>
+      <p class="status-text" data-text></p>
+      <div class="status-actions" data-actions></div>
+      <ul class="facts" data-facts hidden></ul>
+    </section>
+  </main>
+</body>
+</html>

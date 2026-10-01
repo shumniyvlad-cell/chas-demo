@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru" data-demo="1" data-motion="off">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Тестовая оплата</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/golos-text-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dela-gothic-one-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script type="module" src="assets/mock-pay.js"></script>
+</head>
+<body>
+  <div class="testbar"><span>Демо: оплата ненастоящая, записи видны только в этом браузере</span></div>
+  <main class="doc wrap">
+    <h1>Тестовая оплата</h1>
+    <p data-summary>Загружаю бронь…</p>
+    <p>Здесь вместо этой страницы будет форма ЮMoney. Кнопка «Оплатить» отправляет сайту такое же подписанное уведомление, какое пришлёт ЮMoney после настоящей оплаты.</p>
+    <form method="post" data-form class="status-actions">
+      <input type="hidden" name="k" data-k>
+      <button class="btn" name="action" value="pay" data-pay>Оплатить</button>
+      <button class="btn btn-ghost" name="action" value="cancel">Отказаться</button>
+    </form>
+  </main>
+</body>
+</html>
