@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   about:
     'Продюсирую экспертов и личные бренды: стратегия, контент, боты, запуски. ' +
     'Приходишь с задачей — уходишь с планом, а не с «надо подумать».',
-  telegram: 'marchvlv',
+  telegram: 'marchvlvv',
   timezone: 'Europe/Moscow',
   formats: {
     online: {
